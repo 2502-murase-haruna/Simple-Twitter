@@ -68,19 +68,19 @@ public class User implements Serializable {
         this.description = description;
     }
 
-    public Date getcreatedDate() {
+    public Date getCreatedDate() {
         return createdDate;
     }
 
-    public void setcreatedDate(Date createdDate) {
+    public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 
-    public Date getupdateDate() {
+    public Date getUpdatedDate() {
         return updatedDate;
     }
 
-    public void setupdateDate(Date updateDate) {
+    public void setUpdatedDate(Date updateDate) {
         this.updatedDate = updateDate;
     }
 }
