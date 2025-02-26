@@ -8,6 +8,7 @@ package chapter6.controller;
  *
  */
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -17,7 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import chapter6.beans.User;
+import chapter6.beans.UserMessage;
 import chapter6.logging.InitApplication;
+import chapter6.service.MessageService;
 
 
 @WebServlet(urlPatterns = { "/index.jsp" })
@@ -51,6 +54,9 @@ public class TopServlet extends HttpServlet {
 	            isShowMessageForm = true;
 	        }
 
+	        List<UserMessage> messages = new MessageService().select();
+
+	        request.setAttribute("messages", messages);
 	        request.setAttribute("isShowMessageForm", isShowMessageForm);
 	        request.getRequestDispatcher("/top.jsp").forward(request, response);
 	    }
