@@ -14,6 +14,8 @@ import java.sql.Connection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang.StringUtils;
+
 import chapter6.beans.User;
 import chapter6.dao.UserDao;
 import chapter6.logging.InitApplication;
@@ -121,13 +123,25 @@ public class UserService {
 
         Connection connection = null;
         try {
-            // パスワード暗号化
-            String encPassword = CipherUtil.encrypt(user.getPassword());
-            user.setPassword(encPassword);
+        	if(!StringUtils.isBlank(user.getPassword())) {
+        		/*serviceで行っている処理のうち、分岐させなければいけないものをここに入れる*/
 
-            connection = getConnection();
-            new UserDao().update(connection, user);
-            commit(connection);
+        		 //①パスワード暗号化
+                String encPassword = CipherUtil.encrypt(user.getPassword());
+                user.setPassword(encPassword);
+        	}
+        	/*入っていても入っていなくてもする処理はこの下に記載*/
+
+                //②DB接続
+                connection = getConnection();
+
+                /*③Dao呼び出し*/
+                new UserDao().update(connection, user);
+
+                /*④コミット*/
+                commit(connection);
+
+
         } catch (RuntimeException e) {
             rollback(connection);
     	  log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);

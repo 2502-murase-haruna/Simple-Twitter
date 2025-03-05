@@ -18,10 +18,12 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang.StringUtils;
+
 import chapter6.beans.User;
+import chapter6.exception.NoRowsUpdatedRuntimeException;
 import chapter6.exception.SQLRuntimeException;
 import chapter6.logging.InitApplication;
-import chapter6.exception.NoRowsUpdatedRuntimeException;
 
 public class UserDao {
     /**
@@ -184,11 +186,13 @@ public class UserDao {
         try {
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE users SET ");
-            sql.append("    account = ?, ");
-            sql.append("    name = ?, ");
-            sql.append("    email = ?, ");
-            sql.append("    password = ?, ");
-            sql.append("    description = ?, ");
+            sql.append("    account = ?, "); //絶対入る
+            sql.append("    name = ?, ");//絶対入る
+            sql.append("    email = ?, ");//絶対入る
+            if(!StringUtils.isBlank(user.getPassword())) {
+            sql.append("    password = ?, "); //更新されるとき、されないときある
+            }
+            sql.append("    description = ?, ");//絶対入る
             sql.append("    updated_date = CURRENT_TIMESTAMP ");
             sql.append("WHERE id = ?");
 
@@ -197,9 +201,13 @@ public class UserDao {
             ps.setString(1, user.getAccount());
             ps.setString(2, user.getName());
             ps.setString(3, user.getEmail());
+            if(!StringUtils.isBlank(user.getPassword())) {
             ps.setString(4, user.getPassword());
             ps.setString(5, user.getDescription());
             ps.setInt(6, user.getId());
+            }else
+            ps.setString(4, user.getDescription());
+            ps.setInt(5, user.getId());
 
             int count = ps.executeUpdate();
             if (count == 0) {
