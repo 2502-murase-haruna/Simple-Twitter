@@ -51,6 +51,7 @@ public class SignUpServlet extends HttpServlet {
 	        request.getRequestDispatcher("signup.jsp").forward(request, response);
 	    }
 
+	    /*ユーザ登録　の　登録(insert)*/
 	    @Override
 	    protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	            throws IOException, ServletException {
@@ -61,12 +62,18 @@ public class SignUpServlet extends HttpServlet {
 
 	        List<String> errorMessages = new ArrayList<String>();
 
+	        /*リクエストから入力値(user)をget*/
 	        User user = getUser(request);
+
+	        /*user(入力値)：バリデーションチェック falseの時、
+	         * エラーメッセージをセット、signup.jspにforward*/
 	        if (!isValid(user, errorMessages)) {
 	            request.setAttribute("errorMessages", errorMessages);
 	            request.getRequestDispatcher("signup.jsp").forward(request, response);
 	            return;
 	        }
+
+	        /*エラーが無い場合、serviceを呼び出し(insert)*/
 	        new UserService().insert(user);
 	        response.sendRedirect("./");
 	    }
@@ -86,25 +93,39 @@ public class SignUpServlet extends HttpServlet {
 	        return user;
 	    }
 
+	    /*バリデーション…入力値のチェック
+	     * true:エラーが　0件
+	     * false:エラーが　1件以上*/
 	    private boolean isValid(User user, List<String> errorMessages) {
 
 
 		  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
 	        " : " + new Object(){}.getClass().getEnclosingMethod().getName());
 
+		    /*リクエストからgetした入力値(＝引数のuser)各入力値をget*/
 	        String name = user.getName();
 	        String account = user.getAccount();
 	        String password = user.getPassword();
 	        String email = user.getEmail();
 
+	        /*バリデーションチェックを行うためのserviceを呼び出し(select),
+	         * confirmAccount … セレクト結果*/
+	        User confirmAccount = new UserService().select(account);
+
 	        if (!StringUtils.isEmpty(name) && (20 < name.length())) {
 	            errorMessages.add("名前は20文字以下で入力してください");
 	        }
 
+	        /*文字数*/
 	        if (StringUtils.isEmpty(account)) {
 	            errorMessages.add("アカウント名を入力してください");
-	        } else if (20 < account.length()) {
+	        } else if(20 < account.length()) {
 	            errorMessages.add("アカウント名は20文字以下で入力してください");
+	        }
+
+	        /*重複*/
+	        if (confirmAccount != null) {
+	        	errorMessages.add("ユーザーが重複しています");
 	        }
 
 	        if (StringUtils.isEmpty(password)) {

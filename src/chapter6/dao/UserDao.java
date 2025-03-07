@@ -222,4 +222,40 @@ public class UserDao {
         }
     }
 
+    /*
+     *■登録時の件数チェック ‐ String型のaccountを引数にもつ、selectメソッドを追加する
+     *
+     */
+    public User select(Connection connection, String account) {
+
+        PreparedStatement ps = null;
+        /*検索条件：account　で何件取得できるか*/
+        try {
+            String sql = "SELECT * FROM users WHERE account = ?";
+
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, account);
+
+            ResultSet rs = ps.executeQuery();
+
+            List<User> users = toUsers(rs);
+
+            /*アカウントが0件登録されていたら*/
+            if (users.isEmpty()) {
+                return null;
+            /*アカウントが2件<=登録されていたら*/
+            } else if (2 <= users.size()) {
+                throw new IllegalStateException("ユーザーが重複しています");
+            /*アカウントが1件だけ登録されていたら*/
+            } else {
+                return users.get(0);
+            }
+
+        } catch (SQLException e) {
+            throw new SQLRuntimeException(e);
+        } finally {
+            close(ps);
+        }
+    }
+
 }
