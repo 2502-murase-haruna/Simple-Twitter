@@ -26,48 +26,47 @@ import chapter6.service.MessageService;
 @WebServlet(urlPatterns = { "/index.jsp" })
 public class TopServlet extends HttpServlet {
 	/**
-	    * ロガーインスタンスの生成
-	    */
-	    Logger log = Logger.getLogger("twitter");
+	* ロガーインスタンスの生成
+	*/
+	Logger log = Logger.getLogger("twitter");
 
-	    /**
-	    * デフォルトコンストラクタ
-	    * アプリケーションの初期化を実施する。
-	    */
-	    public TopServlet() {
-	        InitApplication application = InitApplication.getInstance();
-	        application.init();
+	/**
+	* デフォルトコンストラクタ
+	* アプリケーションの初期化を実施する。
+	*/
+	public TopServlet() {
+		InitApplication application = InitApplication.getInstance();
+		application.init();
 
+	}
+
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	throws IOException, ServletException {
+
+		log.info(new Object(){}.getClass().getEnclosingClass().getName() +
+	    " : " + new Object(){}.getClass().getEnclosingMethod().getName());
+
+		boolean isShowMessageForm = false;
+
+	    /*sessionからログイン情報を取得*/
+		User user = (User) request.getSession().getAttribute("loginUser");
+
+		if (user != null) {
+			isShowMessageForm = true;
 	    }
 
-	    @Override
-	    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-	            throws IOException, ServletException {
+	    /*
+	     * String型のuser_idの値をrequest.getParameter("user_id")で
+	     * JSPから受け取るように設定
+	     * MessageServiceのselectに引数としてString型のuser_idを追加
+	     */
+		String userId = request.getParameter("user_id");
+		List<UserMessage> messages = new MessageService().select(userId);
 
-
-		  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
-	        " : " + new Object(){}.getClass().getEnclosingMethod().getName());
-
-	        boolean isShowMessageForm = false;
-
-	        /*sessionからログイン情報を取得*/
-	        User user = (User) request.getSession().getAttribute("loginUser");
-
-	        if (user != null) {
-	            isShowMessageForm = true;
-	        }
-
-	        /*
-	         * String型のuser_idの値をrequest.getParameter("user_id")で
-	         * JSPから受け取るように設定
-	         * MessageServiceのselectに引数としてString型のuser_idを追加
-	         */
-	        String userId = request.getParameter("user_id");
-	        List<UserMessage> messages = new MessageService().select(userId);
-
-	        request.setAttribute("messages", messages);
-	        request.setAttribute("isShowMessageForm", isShowMessageForm);
-	        request.getRequestDispatcher("/top.jsp").forward(request, response);
-	    }
+		request.setAttribute("messages", messages);
+		request.setAttribute("isShowMessageForm", isShowMessageForm);
+		request.getRequestDispatcher("/top.jsp").forward(request, response);
+	}
 
 }
