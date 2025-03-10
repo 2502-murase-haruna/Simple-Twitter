@@ -129,12 +129,9 @@ public class SettingServlet extends HttpServlet {
 		    errorMessages.add("アカウント名は20文字以下で入力してください");
 		}
 
-		/*sessionからログイン情報を取得*/
-		/*取得したログイン情報から、ユーザidを取得*/
-
 		/*重複
-		 * 取得結果がnull(0件でない=1件)　且つ　*/
-		if (confirmAccount != null && (user.getId() != confirmAccount.getId())) {
+		 * 取得結果がnull(0件でない=1件)　且つ　 ログインID　がcomfirmAccountのIDでない*/
+		if (confirmAccount != null && user.getId() != confirmAccount.getId()) {
 			errorMessages.add("ユーザーが重複しています");
 		}
 

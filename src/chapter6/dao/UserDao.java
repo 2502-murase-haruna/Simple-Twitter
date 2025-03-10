@@ -204,10 +204,10 @@ public class UserDao {
 				ps.setString(4, user.getPassword());
 				ps.setString(5, user.getDescription());
 				ps.setInt(6, user.getId());
-			}else
-			ps.setString(4, user.getDescription());
-			ps.setInt(5, user.getId());
-
+			}else {
+				ps.setString(4, user.getDescription());
+				ps.setInt(5, user.getId());
+			}
 			ps.executeUpdate();
         } catch (SQLException e) {
         	log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
