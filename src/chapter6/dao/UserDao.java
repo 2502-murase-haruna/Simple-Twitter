@@ -186,6 +186,7 @@ public class UserDao {
         try {
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE users SET ");
+
             sql.append("    account = ?, "); //絶対入る
             sql.append("    name = ?, ");//絶対入る
             sql.append("    email = ?, ");//絶対入る

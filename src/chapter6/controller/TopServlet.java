@@ -49,7 +49,10 @@ public class TopServlet extends HttpServlet {
 	        " : " + new Object(){}.getClass().getEnclosingMethod().getName());
 
 	        boolean isShowMessageForm = false;
+
+	        /*sessionからログイン情報を取得*/
 	        User user = (User) request.getSession().getAttribute("loginUser");
+
 	        if (user != null) {
 	            isShowMessageForm = true;
 	        }

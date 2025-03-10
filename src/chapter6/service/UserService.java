@@ -155,18 +155,22 @@ public class UserService {
         }
     }
 
-    /*
-     * String型の引数をもつ、selectメソッドを追加する
-     */
+    /*setting、signUpサーブレット-バリデーション(重複チェック用)select */
     public User select(String account) {
 
         Connection connection = null;
         try {
             connection = getConnection();
+
+            /*dao(selectを呼び出し、検索結果(return)を変数userに格納*/
             User user = new UserDao().select(connection, account);
+
+
             commit(connection);
 
+            /*servletに検索結果をreturn*/
             return user;
+
         } catch (RuntimeException e) {
             rollback(connection);
             throw e;
