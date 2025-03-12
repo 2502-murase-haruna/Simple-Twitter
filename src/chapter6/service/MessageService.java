@@ -127,4 +127,28 @@ public class MessageService {
         	close(connection);
         }
     }
+
+	public Message edit(int messageId) {
+
+		log.info(new Object(){}.getClass().getEnclosingClass().getName() +
+        " : " + new Object(){}.getClass().getEnclosingMethod().getName());
+
+		Connection connection = null;
+		try {
+			connection = getConnection();
+			Message message = new MessageDao().edit(connection, messageId);
+			commit(connection);
+			return message;
+        } catch (RuntimeException e) {
+        	rollback(connection);
+        	log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
+        	throw e;
+        } catch (Error e) {
+        	rollback(connection);
+        	log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
+        	throw e;
+        } finally {
+        	close(connection);
+        }
+    }
 }
