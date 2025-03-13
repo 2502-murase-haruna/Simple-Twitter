@@ -152,7 +152,7 @@ public class MessageDao {
     	PreparedStatement ps = null;
     	try {
             StringBuilder sql = new StringBuilder();
-            sql.append("update text from messages where id = ?" );
+            sql.append("update messages set text where id = ?" );
 
             ps = connection.prepareStatement(sql.toString());
 

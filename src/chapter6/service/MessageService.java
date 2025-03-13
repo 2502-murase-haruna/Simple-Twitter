@@ -152,7 +152,7 @@ public class MessageService {
         }
     }
 
-	public Message update(Message messageId) {
+	public Message update(int messageId) {
 		log.info(new Object(){}.getClass().getEnclosingClass().getName() +
 		 " : " + new Object(){}.getClass().getEnclosingMethod().getName());
 
