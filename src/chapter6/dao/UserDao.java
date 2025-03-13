@@ -208,6 +208,7 @@ public class UserDao {
 				ps.setString(4, user.getDescription());
 				ps.setInt(5, user.getId());
 			}
+
 			ps.executeUpdate();
         } catch (SQLException e) {
         	log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
