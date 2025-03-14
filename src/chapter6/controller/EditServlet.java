@@ -75,6 +75,7 @@ public class EditServlet extends HttpServlet {
         /*テキストをセット*/
         message.setText(text);
 
+
         /*user型で変数を作成sessionからログインユーザーを取得*/
         User user = (User) session.getAttribute("loginUser");
 
